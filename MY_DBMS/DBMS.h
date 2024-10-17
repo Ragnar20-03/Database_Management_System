@@ -1,29 +1,69 @@
+#include "Header.h"
+#include <vector>
 #include "DB.h"
-#include<iostream>
-using namespace std ; 
-#include<map>
-class DBMS  { 
-    public : 
-    map < string ,   DB * > database_map ;
 
-    void createDatabase ( string name ) 
+ class DBMS 
+{
+    public :
+    // DLL < DB  * >  databases ;       // pointer to db objects
+    // // DLL < DB  > * databases ;    // to actual db objects
+    vector < DB * > databases ;
+    map < string , int > mp ; 
+    int count  ; 
+
+    DBMS ()
     {
-            DB* newDatabase = new DB(name);
-            this->database_map[name] = newDatabase;
-            cout<<"database created Succesfully !"<<endl;
+        this -> count = 0 ; 
+        cout<<"Database Management Sustem is Ready to store your data ...! \n" ; 
     }
-    
-
-    DB *  switch_database ( string name )
+    int createDatabase ( string name )
     {
-        if ( database_map [ name ])  
+        DB * dobj = new DB (name );
+        if (dobj != nullptr)
+        {   
+            this->databases.push_back( dobj);
+            mp[name] = count;   
+            this -> count ++ ; 
+            cout<<" Database Created Succesfully ! \n";
+            return 0 ; 
+        }
+        return -1 ; 
+    }
+
+    void showDatabases ()
+    {
+        cout<<"Databases  are : \n" ;
+        for (int i = 0 ; i < count ; i++ )
         {
-            cout<<"database Switched to : " <<name << endl; 
-            return database_map[name];
+            cout<<databases[i]->name <<"\n";
         }
-        else {
-            cout<<"No such database  ! "<<endl; 
-            return nullptr; 
-        }
+        cout<<endl;
     }
-} ;
+
+    int deleteDatabase (string name ) 
+    {
+        if (mp[name])
+        {
+            databases.erase( databases.begin () + mp[name]);
+            cout<< "DBMS : Datbase delete succesfully ! \n";
+            return 0 ;
+        }
+        else 
+        {
+            cout<< "DBMS : Datbase delete Failed ! \n";
+            return -1 ; 
+        }   
+    }   
+
+    DB * switchDatabase (string name )
+    {
+        DB * ptrToReturn = nullptr ; 
+        if (mp[name])
+        {
+            ptrToReturn = databases[ mp[name] ];
+        }
+        return ptrToReturn ; 
+    }
+
+
+};

@@ -1,31 +1,58 @@
-#include<iostream>
-#include<string>
-#include<map>
+#include "Header.h"
 #include "DBMS.h"
-#include<vector>
-using namespace std ;
 
 
-
-
-int main()
+int main () 
 {
-    DBMS *  dobj = new DBMS();
-    string command ="";
+    DBMS * dbmsObj = new DBMS () ;
+    string command ; 
+    if (!dbmsObj)
+    {
+        cout<< " Failed TO start  Database Management System :  \n ";
+        return 0 ; 
+    }
+    cout << "DBMS Started Succesfully ! ........\n";
 
-    dobj->createDatabase("Database_1") ; 
-    DB * current_database = dobj->switch_database("Database_1") ;
-    current_database->createTable("table1");
-    current_database->createTable("roshan" );
-    // current_database->createTable("table2");
-    // current_database->createTable("table3");
+    while  (1 ) 
+    {
+        cout<<"inside while \n" ;
+        cout << "$-> \t";
+        getline(cin, command);
 
-    // current_database->showTables();
-    // current_database->deleteTable("table2");
-    current_database->showTables();
-    current_database->describe("roshan");
-    current_database->addRecord("roshan");
+        std::istringstream iss(command);
+        std::vector<std::string> tokens;
+        std::string token;
+        while (iss >> token) {
+            tokens.push_back(token);
+        }
 
-    current_database->showRecords("roshan");
-    return 0 ;
+        // Check the number of tokens
+        if (tokens.size() == 0) {
+            cout<<"inside if \n";
+            continue; // If no input, skip the iteration
+        }
+
+        // Command: create database database_name
+        if (tokens[0] == "create" && tokens.size() == 3 && tokens[1] == "database") {
+            dbmsObj->createDatabase(tokens[2]);
+        }
+        // Command: switch database database_name
+        else if (tokens[0] == "switch" && tokens.size() == 3 && tokens[1] == "database") {
+            dbmsObj->switchDatabase(tokens[2]);
+        }
+        // Command: show databases
+        else if (tokens[0] == "show" && tokens.size() == 2 && tokens[1] == "databases") {
+            dbmsObj->showDatabases();
+        }
+        // Unknown command
+        else {
+            std::cout << " Failed to recognize Command ! \n";
+        }
+    }
+    return  0 ;
 }
+
+// create database database_name 
+// switch database database_name
+// shoe databases
+// create table table_name
