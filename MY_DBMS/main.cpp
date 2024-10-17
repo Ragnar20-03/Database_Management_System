@@ -32,7 +32,11 @@ int main ()
         if (tokens.size() == 0) {
             continue; // If no input, skip the iteration
         }
+        if (tokens[0] == "clear")
+        {
+            system("clear");
 
+        }
         // Command: create database database_name
         if (tokens[0] == "create" && tokens.size() == 3 && tokens[1] == "database") {
             dbmsObj->createDatabase(tokens[2]);
