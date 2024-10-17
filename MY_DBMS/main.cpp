@@ -5,6 +5,7 @@
 int main () 
 {
     DBMS * dbmsObj = new DBMS () ;
+    DB * currentDatabase = nullptr ; 
     string command ; 
     if (!dbmsObj)
     {
@@ -26,9 +27,9 @@ int main ()
             tokens.push_back(token);
         }
 
+        cout<<"Token of 0 : "<<tokens[0]<<endl;
         // Check the number of tokens
         if (tokens.size() == 0) {
-            cout<<"inside if \n";
             continue; // If no input, skip the iteration
         }
 
@@ -38,15 +39,40 @@ int main ()
         }
         // Command: switch database database_name
         else if (tokens[0] == "switch" && tokens.size() == 3 && tokens[1] == "database") {
-            dbmsObj->switchDatabase(tokens[2]);
+            currentDatabase = dbmsObj->switchDatabase(tokens[2]);
+            if (currentDatabase == nullptr)
+            {
+                cout << " NO Database of This name ! \n";
+            }
+            else {
+                cout<< " Switched database to :->  " << currentDatabase->name << endl;
+            }
         }
         // Command: show databases
         else if (tokens[0] == "show" && tokens.size() == 2 && tokens[1] == "databases") {
             dbmsObj->showDatabases();
         }
+        // Command: delete database database_name
+        else if (tokens[0] == "delete" && tokens.size() == 3 && tokens[1] == "database") {
+
+            dbmsObj->deleteDatabase(tokens[2]);
+        }
+        // Command: create table table_name
+        else if (tokens[0] == "create" && tokens.size() == 3 && tokens[1] == "table") {
+            currentDatabase->createTable(tokens[2]);
+        }
+        // Command: show tables
+        else if (tokens[0] == "show" && tokens.size() == 2 && tokens[1] == "tables") {
+            currentDatabase->showTables();
+        }
+        // Command: Remove tables
+        else if (tokens[0] == "delete" && tokens.size() == 2 && tokens[1] == "table") {
+            currentDatabase->deleteTable(tokens[2]);
+        }
         // Unknown command
         else {
-            std::cout << " Failed to recognize Command ! \n";
+            // dbmsObj->deleteDatabase(tokens[2]);
+            // std::cout << " Failed to recognize Command ! \n";
         }
     }
     return  0 ;

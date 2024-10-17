@@ -42,27 +42,40 @@
 
     int deleteDatabase (string name ) 
     {
-        if (mp[name])
+        if (mp.find(name) != mp.end() && mp[name] != -1)
         {
-            databases.erase( databases.begin () + mp[name]);
-            cout<< "DBMS : Datbase delete succesfully ! \n";
-            return 0 ;
+            // Check if the index is valid
+            int index = mp[name];
+            if (index >= 0 && index < databases.size())
+            {
+                databases.erase(databases.begin() + index);
+                // Optionally, remove the entry from the map after deletion
+                mp.erase(name);
+                this -> count -- ; 
+                cout << "DBMS: Database deleted successfully! \n";
+                return 0;
+            }
+            else
+            {
+                cout << "DBMS: Index is out of range! \n";
+                return -1;
+            }
         }
         else 
         {
-            cout<< "DBMS : Datbase delete Failed ! \n";
-            return -1 ; 
-        }   
+            cout << "DBMS: Database delete failed! The database does not exist.\n";
+            return -1; 
+        }
     }   
 
     DB * switchDatabase (string name )
     {
         DB * ptrToReturn = nullptr ; 
-        if (mp[name])
-        {
-            ptrToReturn = databases[ mp[name] ];
+        if (mp.find(name) != mp.end() ) {
+        cout<<"MP OF NAME IS : "<<mp[name]<<endl;
+            return databases[mp[name]] ; 
         }
-        return ptrToReturn ; 
+        return nullptr;
     }
 
 

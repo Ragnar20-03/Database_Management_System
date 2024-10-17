@@ -1,0 +1,3 @@
+create database 1
+show databases
+delete database 1
